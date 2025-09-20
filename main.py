@@ -38,8 +38,22 @@ GRAY = graphics.create_pen(128, 144, 166)
 
 # ==== Utility Functions ====
 
+def legal_notice():
+    messages = [
+    "Powered by TfL Open Data",
+    "Contains OS data © Crown copyright and database rights 2016",
+    "Contains Geomni UK Map data © and database rights [2019]",
+    ]
+    for message in messages:
+        graphics.set_pen(BLACK)
+        graphics.clear()
+        graphics.set_pen(TEXT)
+        graphics.text(message, 0, 14, width, scale=1)
+        i75.update(graphics)
+        time.sleep(5)
+
 def get_status():
-    url = "replace with your TfL/other provider status API endpoint"
+    url = "your_api_endpoint_here"
     res = urequests.get(url)
     data = res.json()
     res.close()
@@ -59,7 +73,7 @@ def get_status():
         return closure.title(), MAGENTA
 
 def get_arrivals():
-    url = "replace with your TfL/other provider arrivals API endpoint"
+    url = "your_api_endpoint_here"
     res = urequests.get(url)
     data = res.json()
     res.close()
@@ -89,7 +103,7 @@ def show_arrivals(arrivals, status_color):
     # Draw header
     graphics.set_font("bitmap8")
     graphics.set_pen(HEADER)
-    graphics.text("Replace with your station name", 12, 0, width, scale=1)
+    graphics.text("Woodford Departures", 12, 0, width, scale=1)
 
     # Draw arrivals
     graphics.set_font("bitmap6")
@@ -111,8 +125,9 @@ def show_arrivals(arrivals, status_color):
 
 # ==== Wi-Fi Connect Screen ====
 
-graphics.set_pen(MAGENTA)
+graphics.set_pen(BLACK)
 graphics.clear()
+graphics.set_pen(MAGENTA)
 graphics.set_font("bitmap6")
 graphics.text("Connecting...", 0, 20, width, scale=1)
 i75.update(graphics)
@@ -124,8 +139,9 @@ wlan.connect(SSID, PSK)
 while not wlan.isconnected():
     time.sleep(1)
 
-graphics.set_pen(GREEN)
+graphics.set_pen(BLACK)
 graphics.clear()
+graphics.set_pen(GREEN)
 graphics.text("Connected!", 0, 20, width, scale=1)
 i75.update(graphics)
 time.sleep(1)
@@ -133,6 +149,7 @@ time.sleep(1)
 # ==== Main Loop ====
 
 last_arrivals = []
+legal_time = 0
 scroll_index = 0
 max_visible = 4
 scroll_delay = 5
@@ -184,5 +201,15 @@ while True:
             scroll_index = 0
 
     time.sleep(scroll_delay)
+    
+    legal_time += 1
+    
+    if legal_time >= 720:
+        legal_notice()
+        legal_time = 0
+    else:
+        continue
+    
+
 
 

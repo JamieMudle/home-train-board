@@ -37,6 +37,8 @@ https://api.tfl.gov.uk/Line/{LINE}/Arrivals/{STATION_ID}?direction=inbound&app_k
 
 - Sorts by timeToStation, displays up to 4 entries at once, and scrolls.
 
+- Every Hour displays the legal notices required by tfl open use policy on a fresh page and then returns to the arrivals screen. If you need to add different legal notices you can replace the messages variable with a list of your choice of messages
+
 - Throttles API calls with fetch_interval = 30 seconds (tweakable).
 
 - Falls back to the last known arrivals list if a fetch fails.

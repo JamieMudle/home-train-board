@@ -52,8 +52,8 @@ def legal_notice():
         i75.update(graphics)
         time.sleep(5)
 
-def get_status():
-    url = "your_api_endpoint_here"
+def get_disruptions():
+    url = f"https://api.tfl.gov.uk/Line/{LINE}/Disruption?app_key={APP_KEY}" # set your own line and app_key in CONFIG.py
     res = urequests.get(url)
     data = res.json()
     res.close()
@@ -73,7 +73,7 @@ def get_status():
         return closure.title(), MAGENTA
 
 def get_arrivals():
-    url = "your_api_endpoint_here"
+    url =  f"https://api.tfl.gov.uk/StopPoint/{STATION_ID}/Arrivals?app_key={APP_KEY}" # set your own station_id and app_key in CONFIG.py
     res = urequests.get(url)
     data = res.json()
     res.close()
@@ -163,7 +163,7 @@ while True:
     # Fetch new data only every `fetch_interval` seconds
     if current_time - last_fetch >= fetch_interval:
         try:
-            status_text, status_color = get_status()
+            status_text, status_color = get_disruptions()
             arrivals = get_arrivals()
 
             if arrivals:
